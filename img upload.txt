@@ -1,0 +1,29 @@
+      $gal_name = $_POST['gal_name'];
+      $category = $_POST['category'];
+      $percent = $_POST['percent'];
+      $type = $_POST['type']; 
+	  $keay = array('i','l','o','v','e','u');
+      $random_keyss = implode('',array_rand($keay,4));
+      $ffile_name = $_FILES['gal_photo_link']['name'];
+      $ffile_size =$_FILES['gal_photo_link']['size'];
+      $ffile_tmp =$_FILES['gal_photo_link']['tmp_name'];
+      $ffile_type=$_FILES['gal_photo_link']['type'];
+      $ffile_ext=strtolower(end(explode('.',$_FILES['gal_photo_link']['name'])));
+      $eexpensions= array("jpeg","jpg","png","gif");
+     if(in_array($ffile_ext,$eexpensions)=== false)
+      {
+        move_uploaded_file($ffile_tmp,"../postimage/".$random_keyss.$ffile_name.".tmp");
+        $image = "";
+		if(in_array($ffile_ext,$eexpensions)=== false)
+      {
+		                unlink("../postimage/".$random_keyss.$ffile_name.".tmp");
+						header('Location: home.php?error=Image Format Was Incorrect <br>Please Select JPEG, JPG, PNG, GIF Format Image');		
+	  }		
+      }
+      else
+      {
+        move_uploaded_file($ffile_tmp,"../postimage/".$random_keyss.$ffile_name);
+        $image = "postimage/".$random_keyss.$ffile_name;
+		mysqli_query($conn,"INSERT INTO result (gal_name,gal_link,category,percent) VALUES ('$gal_name','$image','$category','$percent')");
+        header('Location: home.php?success= Successfully Post Added Gallary Image');    
+	 } 
